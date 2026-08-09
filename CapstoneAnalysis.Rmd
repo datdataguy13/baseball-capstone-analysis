@@ -1,7 +1,7 @@
 ---
 title: "Errors, Endurance, and Enshrinement: A Statistical Look at Baseball with the Lahman Database"
 author: "Tom Matthews"
-date: "`r format(Sys.Date(), '%B %d, %Y')`"
+date: "02/17/2020"
 output:
   html_document:
     toc: true

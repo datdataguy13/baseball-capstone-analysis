@@ -5,8 +5,23 @@ output:
   ioslides_presentation:
     widescreen: true
     smaller: true
-    css: slide_style.css
+    self_contained: true
 ---
+
+<style>
+slide {
+  background-color: #1a1a1a;
+}
+slide.title-slide {
+  background-color: #1a1a1a;
+}
+slide hgroup h1, slide hgroup h2 {
+  color: #f5f5f5;
+}
+article {
+  text-align: center;
+}
+</style>
 
 ## {.flexbox .vcenter}
 
@@ -14,96 +29,11 @@ output:
 <p><a href="https://rpubs.com/datadataguy13/1451741">&larr; Back to the full written analysis</a></p>
 </div>
 
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_01.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_02.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_03.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_04.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_05.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_06.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_07.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_08.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_09.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_10.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_11.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_12.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_13.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_14.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_15.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_16.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_17.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_18.png" style="max-width:100%; max-height:88vh;">
-
-
-## {.flexbox .vcenter}
-
-<img src="presentation_slides/slide_19.png" style="max-width:100%; max-height:88vh;">
+```{r slides, echo=FALSE, results='asis'}
+slide_files <- sort(list.files("presentation_slides", pattern = "\\.png$", full.names = TRUE))
+for (f in slide_files) {
+  uri <- knitr::image_uri(f)
+  cat("## {.flexbox .vcenter}\n\n")
+  cat(sprintf('<img src="%s" style="max-width:100%%; max-height:88vh;">\n\n', uri))
+}
+```
