@@ -72,6 +72,12 @@ cat(img_tag("220px-Herman_Long_Baseball.jpg", "max-width:220px;"))
 ```
 </div>
 
+<div style="float:right; margin-left:20px;">
+```{r cal-ripken-img, results='asis'}
+cat(img_tag("CalRipken.jpeg", "max-width:220px;"))
+```
+</div>
+
 - **Herman Long** -- 1,096 career errors, vs. **Cal Ripken Jr.** -- 225
 - Data set to 1999-2018, the modern era
 - Goal: create an Error Indicator to help predict if a player is more error-prone than his
