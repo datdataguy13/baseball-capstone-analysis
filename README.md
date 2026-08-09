@@ -18,13 +18,16 @@ Originally written for the PDAT620 Data Science Capstone (Feb 2020); refreshed i
 | File | Description |
 |---|---|
 | `CapstoneAnalysis.Rmd` | The complete analysis — narrative + code + plots, knits to the published HTML report |
-| `CapstonePresentationSlides.Rmd` | Click-through slide deck (ioslides) built from the original presentation, published separately |
+| `CapstonePresentationSlides.Rmd` | Click-through slide deck (ioslides) rebuilt from the original presentation's text and charts, published separately |
 | `FieldingCapstoneModels.R` | Standalone script: fielding error logistic regression |
 | `WorkHorseAnalysis.R` | Standalone script: workhorse PCA analysis |
 | `HallOfFameClustering.R` | Standalone script: Hall of Fame K-Means/hierarchical clustering |
-| `presentation_slides/` | Slide images (rasterized from the original deck), used by `CapstonePresentationSlides.Rmd` |
-| `slide_style.css` | Minimal styling for the slide deck |
+| `220px-Herman_Long_Baseball.jpg`, `GregMaddux.jpg` | Photos used in the slide deck |
 | `REQUIREMENTS.md` | R version and package versions needed to reproduce the analysis |
+
+The slide deck re-derives its charts live from the Lahman data (same code as the main report, condensed)
+rather than embedding static screenshots of the original PowerPoint — it has no external file
+dependencies once knitted, so it publishes reliably to RPubs.
 
 ## Reproducing this analysis
 

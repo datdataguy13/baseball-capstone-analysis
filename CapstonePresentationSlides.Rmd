@@ -9,31 +9,332 @@ output:
 ---
 
 <style>
-slide {
-  background-color: #1a1a1a;
-}
-slide.title-slide {
-  background-color: #1a1a1a;
-}
-slide hgroup h1, slide hgroup h2 {
-  color: #f5f5f5;
-}
-article {
-  text-align: center;
-}
+article { text-align: left; }
+.centered { text-align: center; }
 </style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.align = "center")
+
+library(Lahman)
+library(tidyverse)
+library(FactoMineR)
+library(factoextra)
+library(broom)
+
+data(Fielding)
+data(Batting)
+data(People)
+data(HallOfFame)
+data(AwardsPlayers)
+data(AllstarFull)
+
+img_tag <- function(path, style = "max-width:70%; max-height:60vh;") {
+  sprintf('<img src="%s" style="%s">', knitr::image_uri(path), style)
+}
+```
 
 ## {.flexbox .vcenter}
 
-<div style="text-align:center;">
+<div class="centered">
 <p><a href="https://rpubs.com/datadataguy13/1451741">&larr; Back to the full written analysis</a></p>
 </div>
 
-```{r slides, echo=FALSE, results='asis'}
-slide_files <- sort(list.files("presentation_slides", pattern = "\\.png$", full.names = TRUE))
-for (f in slide_files) {
-  uri <- knitr::image_uri(f)
-  cat("## {.flexbox .vcenter}\n\n")
-  cat(sprintf('<img src="%s" style="max-width:100%%; max-height:88vh;">\n\n', uri))
-}
+## Research Questions
+
+- Do certain positions in baseball have a higher correlation to errors?
+- Are there factors that determine if a player will play 80 or more games per season?
+- Does a player having more Gold Gloves and All-Star game appearances put them in special
+  company in the Baseball Hall of Fame?
+- Using logistic regression, principal component analysis, and K-Means clustering, the data
+  reveals the correlations and findings behind each question.
+
+## The Lahman Dataset
+
+- Data goes back as far as 1871 and is kept up to date every season
+- Built-in foreign keys link to other baseball data sources (Retro ID for Retrosheet,
+  bbrefID for Baseball Reference)
+- Tables used: `Fielding`, `Batting`, `People`, `HallOfFame`, `AwardsPlayers`, `AllstarFull`
+
+## Error Analysis and the Inspiration
+
+<div style="float:right; margin-left:20px;">
+```{r herman-long-img, results='asis'}
+cat(img_tag("220px-Herman_Long_Baseball.jpg", "max-width:220px;"))
 ```
+</div>
+
+- **Herman Long** -- 1,096 career errors, vs. **Cal Ripken Jr.** -- 225
+- Data set to 1999-2018, the modern era
+- Goal: create an Error Indicator to help predict if a player is more error-prone than his
+  peers at the same position
+
+## Building the Indicator
+
+Average errors by position across the 1999-2018 window:
+
+```{r slide-avg-errors, fig.width=8, fig.height=4.2}
+myRecentInfieldData <- filter(Fielding, yearID > 1998, yearID <= 2018)
+myFieldData <- union(filter(myRecentInfieldData, lgID == "AL"), filter(myRecentInfieldData, lgID == "NL"))
+myDataSlimmed <- myFieldData %>% select(-WP, -ZR, -playerID, -teamID, -PB, -SB, -stint, -CS)
+myDataSlimmed <- na.omit(myDataSlimmed)
+myDataSlimmed$POS[myDataSlimmed$POS == "P"]  <- 1
+myDataSlimmed$POS[myDataSlimmed$POS == "C"]  <- 2
+myDataSlimmed$POS[myDataSlimmed$POS == "1B"] <- 3
+myDataSlimmed$POS[myDataSlimmed$POS == "2B"] <- 4
+myDataSlimmed$POS[myDataSlimmed$POS == "3B"] <- 5
+myDataSlimmed$POS[myDataSlimmed$POS == "SS"] <- 6
+myDataSlimmed$POS[myDataSlimmed$POS == "OF"] <- 7
+myDataSlimmed$POS <- as.numeric(as.character(myDataSlimmed$POS))
+myDataClean <- myDataSlimmed
+
+myAvgErrorData <- myDataClean %>% group_by(POS) %>% summarise(AvgErrors = mean(E))
+
+ggplot(myAvgErrorData, aes(x = factor(POS), y = AvgErrors)) +
+  geom_col(fill = "#2c3e50") +
+  labs(x = "Position (1=P, 2=C, 3=1B, 4=2B, 5=3B, 6=SS, 7=OF)", y = "Average Errors") +
+  theme_minimal(base_size = 13)
+```
+
+## Building the Error Indicator
+
+A player is flagged `ErrorInd = 1` when their errors exceed the rounded-up average for their position:
+
+```{r error-ind-code, echo=TRUE, eval=FALSE}
+myDataClean$ErrorInd <- ifelse(
+  myDataClean$POS == 1 & myDataClean$E > 1 |
+  myDataClean$POS == 2 & myDataClean$E > 3 |
+  myDataClean$POS == 5 & myDataClean$E > 4 |
+  myDataClean$POS == 3 & myDataClean$E > 2 |
+  myDataClean$POS == 4 & myDataClean$E > 3 |
+  myDataClean$POS == 6 & myDataClean$E > 5 |
+  myDataClean$POS == 7 & myDataClean$E > 1,
+  1, 0
+)
+```
+
+## Logistic Regression Results
+
+```{r slide-logistic}
+myDataClean$ErrorInd <- ifelse(
+  myDataClean$POS == 1 & myDataClean$E > 1 |
+  myDataClean$POS == 2 & myDataClean$E > 3 |
+  myDataClean$POS == 5 & myDataClean$E > 4 |
+  myDataClean$POS == 3 & myDataClean$E > 2 |
+  myDataClean$POS == 4 & myDataClean$E > 3 |
+  myDataClean$POS == 6 & myDataClean$E > 5 |
+  myDataClean$POS == 7 & myDataClean$E > 1,
+  1, 0
+)
+set.seed(1234)
+smp_size <- floor(0.7 * nrow(myDataClean))
+train_ind <- sample(seq_len(nrow(myDataClean)), size = smp_size)
+train <- myDataClean[train_ind, ]
+fit_log_new <- glm(ErrorInd ~ POS + G + A + DP + lgID + yearID, data = train, family = binomial)
+knitr::kable(broom::tidy(fit_log_new) %>% mutate(across(where(is.numeric), ~round(., 4))))
+```
+
+- **Position, games played, and assists** are the clear standouts in this model
+- 70/30 training/testing split
+- Null-deviance chi-squared test: `1 - pchisq(26528, 25286)` &asymp; 2.7e-08 -- far below 0.05
+
+## What Makes a Workhorse?
+
+- Same 1999-2018 timeframe as the errors analysis
+- Pitchers excluded this time -- their "games played" doesn't mean the same thing as an
+  everyday position player
+- Question: using PCA, are there factors (or combinations of factors) that predict a
+  workhorse-level number of games played?
+
+## How Did 80 Games Become the Threshold?
+
+- Average games played per season, across **all** position players: **~41 games**
+- That felt too low relative to expectations -- roughly doubling it gives a round number: **80**
+- A player who appears in more than 80 games in a season is flagged as a workhorse (`WH = 1`)
+
+## Games Played by Workhorses, by Position
+
+```{r slide-workhorse, fig.width=8, fig.height=4.2}
+myPositionData <- filter(Fielding, yearID > 1998, yearID <= 2018)
+myPositionPlayer <- myPositionData %>% select(yearID, POS, playerID, G) %>% filter(POS != "P")
+myavgGames <- myPositionPlayer %>% group_by(playerID, yearID) %>% summarise(G = sum(G), .groups = "drop")
+myavgGamesByPos <- myPositionPlayer %>% group_by(playerID, yearID, POS) %>% summarise(G = sum(G), .groups = "drop")
+myavgGames$WH <- ifelse(myavgGames$G > 79, 1, 0)
+
+myPlayerPrimaryPosition <- myavgGamesByPos %>%
+  group_by(playerID, yearID) %>% filter(G == max(G)) %>% arrange(playerID, yearID, POS)
+mycleanPrimaryData <- myPlayerPrimaryPosition %>% select(playerID, yearID, POS)
+mycleanPrimaryData$yearPlayer <- paste(mycleanPrimaryData$playerID, mycleanPrimaryData$yearID)
+myavgGames$yearPlayer <- paste(myavgGames$playerID, myavgGames$yearID)
+
+myWH <- merge(x = mycleanPrimaryData, y = myavgGames, by = "yearPlayer", all.x = TRUE) %>%
+  select(POS, G, WH)
+myWH$POS[myWH$POS == "C"]  <- 2
+myWH$POS[myWH$POS == "1B"] <- 3
+myWH$POS[myWH$POS == "2B"] <- 4
+myWH$POS[myWH$POS == "3B"] <- 5
+myWH$POS[myWH$POS == "SS"] <- 6
+myWH$POS[myWH$POS == "OF"] <- 7
+myWH$POS <- as.numeric(as.character(myWH$POS))
+
+myWHViz <- myWH %>% filter(WH == 1) %>% group_by(POS) %>% summarise(G = mean(G))
+
+ggplot(myWHViz, aes(x = factor(POS), y = G)) +
+  geom_col(fill = "#c0392b") +
+  labs(x = "Position (2=C, 4=2B, 5=3B, 6=SS, 7=OF)", y = "Average Games Played") +
+  theme_minimal(base_size = 13)
+```
+
+## PCA Analysis
+
+- Combined fielding, batting, and player-age information
+- Modeled around each player's primary position
+- 80/20 training/testing split
+- Factors: `yearID, POS, age, G, A, E, DP, H, R, RBI, BB, SO`
+
+## Another Look at Workhorse Factors
+
+```{r slide-pca, fig.width=9, fig.height=4.4}
+myBattingData <- filter(Batting, yearID > 1998, yearID <= 2018)
+myTestBattingDataClean <- myBattingData %>% select(playerID, yearID, H, R, SB, RBI, BB, SO)
+myTestBattingDataClean$playerYear <- paste(myTestBattingDataClean$playerID, myTestBattingDataClean$yearID)
+
+myFieldDataSummarized <- myPositionData %>% select(playerID, yearID, A, E, DP) %>%
+  group_by(playerID, yearID) %>% summarise(A = sum(A), E = sum(E), DP = sum(DP), .groups = "drop")
+myFieldDataSummarized$playerYear <- paste(myFieldDataSummarized$playerID, myFieldDataSummarized$yearID)
+
+myData2 <- merge(myFieldDataSummarized, myTestBattingDataClean, by = "playerYear", all.x = TRUE) %>%
+  select(playerYear, playerID.x, A, E, DP, H, R, RBI, BB, SO) %>% rename(player_ID = playerID.x)
+
+myPlayerGames <- merge(myavgGames, People, by = "playerID")
+myPlayerAge <- myPlayerGames %>% select(playerID, yearID, G, WH, birthYear)
+myPlayerAge$age <- myPlayerAge$yearID - myPlayerAge$birthYear
+myPlayerAge$yearPlayer <- paste(myPlayerAge$playerID, myPlayerAge$yearID)
+
+myData1 <- merge(mycleanPrimaryData, myPlayerAge, by = "yearPlayer", all.x = TRUE) %>%
+  select(playerID = playerID.x, yearID = yearID.x, POS, G, WH, age)
+myData1$playerYear <- paste(myData1$playerID, myData1$yearID)
+
+myFinalData <- merge(myData1, myData2, by = "playerYear", all.x = TRUE) %>%
+  select(playerID, yearID, POS, G, WH, age, A, E, DP, H, R, RBI, BB, SO) %>% na.omit() %>%
+  select(yearID, POS, age, G, WH, A, E, DP, H, R, RBI, BB, SO)
+
+myFinalData$POS[myFinalData$POS == "P"]  <- 1
+myFinalData$POS[myFinalData$POS == "C"]  <- 2
+myFinalData$POS[myFinalData$POS == "1B"] <- 3
+myFinalData$POS[myFinalData$POS == "2B"] <- 4
+myFinalData$POS[myFinalData$POS == "3B"] <- 5
+myFinalData$POS[myFinalData$POS == "SS"] <- 6
+myFinalData$POS[myFinalData$POS == "OF"] <- 7
+myFinalData$POS <- as.numeric(as.character(myFinalData$POS))
+
+set.seed(42)
+samp <- sample(nrow(myFinalData), nrow(myFinalData) * 0.8)
+training <- myFinalData[samp, ]
+res.pca <- PCA(training[, -4], graph = FALSE)
+
+fviz_cos2(res.pca, choice = "var", axes = 1:2)
+```
+
+Offensive metrics -- runs, hits, and RBIs -- carry the most weight for predicting workhorse status.
+
+## {.flexbox .vcenter}
+
+<div class="centered" style="font-size:2em;">
+Hall of Fame: All-Star Games and Gold Gloves
+</div>
+
+## No Babe?
+
+- Only players active in 1957 or later are eligible for this analysis (the first Gold Glove
+  wasn't awarded until 1957)
+- **131** Hall of Famers were excluded from this analysis; **99 (now more, with newer
+  inductees)** remained
+
+## K-Means Clustering
+
+- Dependent "label": player's name
+- Independent variables: number of All-Star appearances, number of Gold Gloves awarded
+- 3 clusters requested from the model
+
+## K-Means: Hall of Famers
+
+```{r slide-kmeans, fig.width=9, fig.height=4.6}
+myDataHOF <- HallOfFame %>%
+  select(playerID, votedBy, ballots, needed, votes, needed_note) %>%
+  filter(HallOfFame$inducted == "Y" & HallOfFame$category == "Player")
+myDataHOF <- merge(myDataHOF, People, by = "playerID")
+myDetailHOFData <- myDataHOF %>% select(playerID, nameFirst, nameLast, finalGame)
+myDataHOF <- myDetailHOFData %>% select(playerID, nameFirst, nameLast) %>%
+  filter(myDetailHOFData$finalGame > "1957-01-01")
+myDataHOF$Name <- paste(myDataHOF$nameFirst, myDataHOF$nameLast)
+myDataHOF <- myDataHOF %>% select(playerID, Name)
+
+myGoldGLoves <- AwardsPlayers %>% subset(awardID == "Gold Glove") %>% count(playerID) %>% rename(GoldGLoves = n)
+myAllStarDataTrend <- AllstarFull %>% count(playerID) %>% rename(AllStarGames = n)
+myDataHOF <- merge(myDataHOF, myAllStarDataTrend, by = "playerID", all.x = TRUE)
+myDataHOF <- merge(myDataHOF, myGoldGLoves, by = "playerID", all.x = TRUE)
+myDataHOF <- myDataHOF %>% select(Name, AllStarGames, GoldGLoves)
+myDataHOF[is.na(myDataHOF)] <- 0
+
+mydata_tib <- as_tibble(myDataHOF)
+set.seed(1234)
+y <- mydata_tib$Name
+x <- as.data.frame(mydata_tib[2:3])
+rownames(x) <- y
+k_means_fit <- kmeans(x, 3)
+
+plot_df <- x
+plot_df$Name <- y
+plot_df$Cluster <- factor(k_means_fit$cluster)
+hulls_km <- plot_df %>% group_by(Cluster) %>% slice(chull(AllStarGames, GoldGLoves))
+
+set.seed(1)
+ggplot(plot_df, aes(x = AllStarGames, y = GoldGLoves, color = Cluster, fill = Cluster)) +
+  geom_polygon(data = hulls_km, alpha = 0.15, color = NA, show.legend = FALSE) +
+  geom_jitter(width = 0.15, height = 0.15, size = 2.5, alpha = 0.85) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(x = "All-Star Games", y = "Gold Gloves") +
+  theme_minimal(base_size = 13)
+```
+
+## Hierarchical Clustering
+
+```{r slide-hclust, fig.width=9, fig.height=4.6}
+d <- dist(x, method = "euclidean")
+hc1 <- hclust(d, method = "complete")
+sub_grp <- cutree(hc1, k = 3)
+
+plot_df2 <- x
+plot_df2$Name <- y
+plot_df2$Cluster <- factor(sub_grp)
+hulls_hc <- plot_df2 %>% group_by(Cluster) %>% slice(chull(AllStarGames, GoldGLoves))
+
+set.seed(2)
+ggplot(plot_df2, aes(x = AllStarGames, y = GoldGLoves, color = Cluster, fill = Cluster)) +
+  geom_polygon(data = hulls_hc, alpha = 0.15, color = NA, show.legend = FALSE) +
+  geom_jitter(width = 0.15, height = 0.15, size = 2.5, alpha = 0.85) +
+  scale_color_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "All-Star Games", y = "Gold Gloves") +
+  theme_minimal(base_size = 13)
+```
+
+## A Cluster of His Own
+
+<div style="float:right; margin-left:20px;">
+```{r maddux-img, results='asis'}
+cat(img_tag("GregMaddux.jpg", "max-width:220px;"))
+```
+</div>
+
+- **Greg Maddux** sets himself apart in this model
+- The most Gold Gloves awarded to any player, plus 8 All-Star game appearances
+- A group of just one, among some of baseball's greats
+
+## {.flexbox .vcenter}
+
+<div class="centered" style="font-size:2.2em;">
+Questions and Discussion
+</div>

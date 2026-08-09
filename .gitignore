@@ -6,7 +6,10 @@
 *.jpeg
 *.png
 *.webp
-!presentation_slides/*.png
+
+# Photos embedded in the slide deck
+!220px-Herman_Long_Baseball.jpg
+!GregMaddux.jpg
 
 # Knit/publish build artifacts
 *.html
