@@ -1,0 +1,109 @@
+---
+title: "Capstone Project -- Baseball Analysis of the Lahman Dataset"
+author: "Tom Matthews"
+output:
+  ioslides_presentation:
+    widescreen: true
+    smaller: true
+    css: slide_style.css
+---
+
+## {.flexbox .vcenter}
+
+<div style="text-align:center;">
+<p><a href="https://rpubs.com/datadataguy13/1451741">&larr; Back to the full written analysis</a></p>
+</div>
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_01.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_02.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_03.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_04.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_05.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_06.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_07.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_08.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_09.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_10.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_11.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_12.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_13.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_14.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_15.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_16.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_17.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_18.png" style="max-width:100%; max-height:88vh;">
+
+
+## {.flexbox .vcenter}
+
+<img src="presentation_slides/slide_19.png" style="max-width:100%; max-height:88vh;">

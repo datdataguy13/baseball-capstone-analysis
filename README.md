@@ -9,17 +9,21 @@ Statistical analysis of the [Lahman baseball database](https://cran.r-project.or
 Originally written for the PDAT620 Data Science Capstone (Feb 2020); refreshed in 2026 with interactive
 `plotly` visualizations and re-verified against a current snapshot of the Lahman package.
 
-**Read the full write-up:** _add your RPubs link here after publishing_
+**Read the full write-up:** https://rpubs.com/datadataguy13/1451741
+
+**View the slide deck:** _add the slides RPubs link here after publishing `CapstonePresentationSlides.Rmd`_
 
 ## Repository contents
 
 | File | Description |
 |---|---|
 | `CapstoneAnalysis.Rmd` | The complete analysis — narrative + code + plots, knits to the published HTML report |
+| `CapstonePresentationSlides.Rmd` | Click-through slide deck (ioslides) built from the original presentation, published separately |
 | `FieldingCapstoneModels.R` | Standalone script: fielding error logistic regression |
 | `WorkHorseAnalysis.R` | Standalone script: workhorse PCA analysis |
 | `HallOfFameClustering.R` | Standalone script: Hall of Fame K-Means/hierarchical clustering |
-| `presentation_slides/` | Slide images (rasterized from the original deck) embedded in the report |
+| `presentation_slides/` | Slide images (rasterized from the original deck), used by `CapstonePresentationSlides.Rmd` |
+| `slide_style.css` | Minimal styling for the slide deck |
 | `REQUIREMENTS.md` | R version and package versions needed to reproduce the analysis |
 
 ## Reproducing this analysis

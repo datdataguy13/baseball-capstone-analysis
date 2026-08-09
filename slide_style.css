@@ -1,0 +1,12 @@
+slide {
+  background-color: #1a1a1a;
+}
+slide.title-slide {
+  background-color: #1a1a1a;
+}
+slide hgroup h1, slide hgroup h2 {
+  color: #f5f5f5;
+}
+article {
+  text-align: center;
+}

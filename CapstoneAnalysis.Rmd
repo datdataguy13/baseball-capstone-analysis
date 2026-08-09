@@ -507,15 +507,10 @@ mind when generalizing these clusters to "greatness" as a whole.*
 
 # Presentation Slides
 
-This project was also delivered as a slide presentation. The original deck (`Capstone Presentation.pdf`)
-is reproduced below, slide by slide, for reference alongside the full written analysis above.
+This project was also delivered as a slide presentation. Rather than reproduce all 19 slides inline here,
+they're published as their own click-through deck:
 
-```{r slides, echo=FALSE, results='asis'}
-slide_files <- sort(list.files("presentation_slides", pattern = "\\.png$", full.names = TRUE))
-for (f in slide_files) {
-  cat(sprintf("![](%s)\n\n", f))
-}
-```
+**[View the presentation slides &rarr;](https://rpubs.com/datadataguy13/CAPSTONE_SLIDES_ID)**
 
 ---
 
