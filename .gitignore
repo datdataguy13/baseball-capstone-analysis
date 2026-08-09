@@ -1,0 +1,19 @@
+# Source materials (kept locally, not tracked in this code-focused repo)
+*.docx
+*.pptx
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.webp
+!presentation_slides/*.png
+
+# Knit/publish build artifacts
+*.html
+*.knit.md
+*_files/
+rsconnect/
+
+# macOS / editor cruft
+.DS_Store
+~$*
