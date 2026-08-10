@@ -64,6 +64,12 @@ nice_table <- function(df, digits = 3, font_size = 16, ...) {
   bbrefID for Baseball Reference)
 - Tables used: `Fielding`, `Batting`, `People`, `HallOfFame`, `AwardsPlayers`, `AllstarFull`
 
+<div style="text-align:center; margin-top:20px;">
+```{r SABR, results='asis'}
+cat(img_tag("SABR_logo-square-700px.png", "max-width:220px;"))
+```
+</div>
+
 ## Error Analysis and the Inspiration
 
 <div style="float:left; margin-right:20px;">
