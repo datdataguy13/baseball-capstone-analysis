@@ -166,6 +166,12 @@ nice_table(broom::tidy(fit_log_new), digits = 4)
 - Question: using PCA, are there factors (or combinations of factors) that predict a
   workhorse-level number of games played?
 
+<div style="text-align:center; margin-top:20px;">
+```{r LouGehrig, results='asis'}
+cat(img_tag("LouGehrig.jpg", "max-width:220px;"))
+```
+</div>
+
 ## How Did 80 Games Become the Threshold?
 
 - Average games played per season, across **all** position players: **~41 games**
@@ -270,6 +276,12 @@ Hall of Fame: All-Star Games and Gold Gloves
   wasn't awarded until 1957)
 - **131** Hall of Famers were excluded from this analysis; **99 (now more, with newer
   inductees)** remained
+  
+<div style="text-align:center; margin-top:20px;">
+```{r Babe, results='asis'}
+cat(img_tag("Babe-Ruth-1919.jpg", "max-width:220px;"))
+```
+</div>
 
 ## K-Means Clustering
 
