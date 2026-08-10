@@ -45,7 +45,7 @@ nice_table <- function(df, digits = 3, font_size = 16, ...) {
 ## {.flexbox .vcenter}
 
 <div class="centered">
-<p><a href="https://rpubs.com/datadataguy13/1451741">&larr; Back to the full written analysis</a></p>
+<p><a href="https://rpubs.com/datadataguy13/errors-endurance-enshrinement">&larr; Back to the full written analysis</a></p>
 </div>
 
 ## Research Questions
@@ -163,8 +163,9 @@ nice_table(broom::tidy(fit_log_new), digits = 4)
 - Same 1999-2018 timeframe as the errors analysis
 - Pitchers excluded this time -- their "games played" doesn't mean the same thing as an
   everyday position player
-- Question: using PCA, are there factors (or combinations of factors) that predict a
-  workhorse-level number of games played?
+- Question: using PCA, which factors (or combinations of factors) go hand-in-hand with a
+  workhorse-level number of games played? (PCA is unsupervised -- this surfaces correlated
+  structure, not a predictive classifier)
 
 <div style="text-align:center; margin-top:20px;">
 ```{r LouGehrig, results='asis'}

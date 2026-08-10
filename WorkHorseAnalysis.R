@@ -1,3 +1,6 @@
+# Unedited exploratory work from the original 2020 project -- kept as-is for process transparency.
+# See CapstoneAnalysis.Rmd for the cleaned-up, documented version used in the final report.
+
 # come up with a cool graph that shows average games played by position
 library(Lahman)
 library(tidyverse)

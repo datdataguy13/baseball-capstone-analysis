@@ -1,3 +1,6 @@
+# Unedited exploratory work from the original 2020 project -- kept as-is for process transparency.
+# See CapstoneAnalysis.Rmd for the cleaned-up, documented version used in the final report.
+
 # rm(list = ls())
 library(Lahman)
 library(tidyverse)
@@ -79,7 +82,7 @@ smp_size <- floor(0.7*nrow(myDataClean))
 train_ind <- sample(seq_len(nrow(myDataClean)),size = smp_size)
 train <- myDataClean[train_ind,]
 test <- myDataClean[-train_ind,]
-# run regression model This is not working email professor with code and file and see what we can do
+# run regression model
 fit_log_new <- glm(ErrorInd ~ POS+G+A+DP+lgID+yearID, data=train,family=binomial)
 summary(fit_log_new)
 1-pchisq(26528,25286)

@@ -3,15 +3,22 @@
 Statistical analysis of the [Lahman baseball database](https://cran.r-project.org/package=Lahman) exploring three questions:
 
 1. **Fielding errors** — Are certain positions more error-prone than others? (logistic regression)
-2. **Workhorse players** — What predicts whether a position player logs 80+ games in a season? (PCA)
+2. **Workhorse players** — Which stats go hand-in-hand with a position player logging 80+ games in a season? (PCA)
 3. **Hall of Fame archetypes** — Do All-Star appearances and Gold Gloves cluster Hall of Famers into recognizable groups? (K-Means & hierarchical clustering)
 
 Originally written for the PDAT620 Data Science Capstone (Feb 2020); refreshed in 2026 with interactive
 `plotly` visualizations and re-verified against a current snapshot of the Lahman package.
 
-**Read the full write-up:** https://rpubs.com/datadataguy13/1451741
+**Skills demonstrated:** logistic regression with test-set evaluation (confusion matrix, sensitivity/
+specificity, AUC), principal component analysis, K-Means and hierarchical clustering with silhouette-based
+cluster validation, hypothesis testing (chi-squared), data wrangling across six relational tables, and
+interactive visualization with `plotly`.
 
-**View the slide deck:** _add the slides RPubs link here after publishing `CapstonePresentationSlides.Rmd`_
+**Read the full write-up:** https://rpubs.com/datadataguy13/errors-endurance-enshrinement
+
+**View the slide deck:** https://rstudio-pubs-static.s3.amazonaws.com/1451780_cd15c6dd2cae40ae9451e8925fdc299e.html
+(linked to the raw slide file rather than its RPubs page — RPubs wraps ioslides decks in a
+header/footer toolbar that fights the deck's own click/keyboard navigation)
 
 ## Repository contents
 

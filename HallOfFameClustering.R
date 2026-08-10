@@ -1,3 +1,6 @@
+# Unedited exploratory work from the original 2020 project -- kept as-is for process transparency.
+# See CapstoneAnalysis.Rmd for the cleaned-up, documented version used in the final report.
+
 library(Lahman)
 library(tidyverse)
 library(dplyr)
