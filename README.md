@@ -14,11 +14,7 @@ specificity, AUC), principal component analysis, K-Means and hierarchical cluste
 cluster validation, hypothesis testing (chi-squared), data wrangling across six relational tables, and
 interactive visualization with `plotly`.
 
-**Read the full write-up:** https://rpubs.com/datadataguy13/DataScienceCapstoneMLB
-
-**View the slide deck:** https://rstudio-pubs-static.s3.amazonaws.com/1451780_cd15c6dd2cae40ae9451e8925fdc299e.html
-(linked to the raw slide file rather than its RPubs page — RPubs wraps ioslides decks in a
-header/footer toolbar that fights the deck's own click/keyboard navigation)
+**Read the full write-up:** https://datdataguy13-data-science-and-analytical-storytelling-capstone.share.connect.posit.cloud/
 
 ## Repository contents
 
