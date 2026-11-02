@@ -623,12 +623,26 @@ knitr::include_graphics("JimKaat.jpeg")
 This project was also delivered as a slide presentation. Rather than reproduce all 19 slides inline here,
 they're published as their own click-through deck:
 
-**[View the presentation slides &rarr;](https://rstudio-pubs-static.s3.amazonaws.com/1451780_cd15c6dd2cae40ae9451e8925fdc299e.html)**
-
-*Linked directly to the slide file rather than the RPubs page: RPubs wraps presentations in its
-own header/footer toolbars around an iframe, which fights with ioslides' own click/keyboard
-navigation and makes the deck feel like it's "doubling up." This link opens the deck standalone
-with no extra chrome.*
+```{r slides-link, echo=FALSE, results='asis'}
+# The slide link depends on where this report is being published. The GitHub
+# Pages build (render-site.R sets PAGES_BUILD) co-hosts the deck at slides.html,
+# so that build points at the local file and stays fully self-contained. Every
+# other build -- Posit Connect, a plain RStudio knit -- links out to the
+# standalone deck on RPubs instead.
+if (nzchar(Sys.getenv("PAGES_BUILD"))) {
+  cat("**[View the presentation slides &rarr;](slides.html)**\n\n")
+  cat("*The deck is published alongside this report on the same site, so it opens",
+      "standalone with no external dependencies.*")
+} else {
+  cat("**[View the presentation slides &rarr;]",
+      "(https://rstudio-pubs-static.s3.amazonaws.com/1451780_cd15c6dd2cae40ae9451e8925fdc299e.html)**\n\n",
+      sep = "")
+  cat("*Linked directly to the slide file rather than the RPubs page: RPubs wraps presentations in its",
+      "own header/footer toolbars around an iframe, which fights with ioslides' own click/keyboard",
+      "navigation and makes the deck feel like it's \"doubling up.\" This link opens the deck standalone",
+      "with no extra chrome.*")
+}
+```
 
 ---
 

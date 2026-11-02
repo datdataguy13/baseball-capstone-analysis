@@ -7,6 +7,10 @@
 # deployment. Run it locally with `Rscript render-site.R` or let the GitHub
 # Actions workflow run it on every push to main.
 
+# Flags the Pages build so CapstoneAnalysis.Rmd links to the co-hosted
+# slides.html (self-contained) rather than the external RPubs deck.
+Sys.setenv(PAGES_BUILD = "true")
+
 site_dir <- "_site"
 dir.create(site_dir, showWarnings = FALSE)
 
