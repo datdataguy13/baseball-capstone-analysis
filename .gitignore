@@ -20,6 +20,7 @@
 *.html
 *.knit.md
 *_files/
+_site/
 rsconnect/
 
 # macOS / editor cruft

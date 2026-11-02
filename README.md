@@ -14,7 +14,15 @@ specificity, AUC), principal component analysis, K-Means and hierarchical cluste
 cluster validation, hypothesis testing (chi-squared), data wrangling across six relational tables, and
 interactive visualization with `plotly`.
 
-**Read the full write-up:** https://datdataguy13-data-science-and-analytical-storytelling-capstone.share.connect.posit.cloud/
+**Read the full write-up:**
+- Posit Connect Cloud: https://datdataguy13-data-science-and-analytical-storytelling-capstone.share.connect.posit.cloud/
+- GitHub Pages mirror: https://datdataguy13.github.io/baseball-capstone-analysis/ (report), plus [`/slides.html`](https://datdataguy13.github.io/baseball-capstone-analysis/slides.html) for the deck
+
+The report is published to both. GitHub Pages is built automatically by the
+[`publish-pages`](.github/workflows/publish-pages.yml) workflow, which re-knits
+`CapstoneAnalysis.Rmd` and `CapstonePresentationSlides.Rmd` on every push to
+`main` and deploys the self-contained HTML — nothing rendered is committed to the
+repo. Run `Rscript render-site.R` to reproduce the same site locally.
 
 ## Repository contents
 
